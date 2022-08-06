@@ -1,4 +1,4 @@
-package com.newTouch.testclassdemo.enitity;
+package com.newTouch.testClassDemo.enitity;
 
 import lombok.*;
 
