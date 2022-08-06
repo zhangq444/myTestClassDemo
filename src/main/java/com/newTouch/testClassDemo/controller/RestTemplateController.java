@@ -20,16 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 这个是提供给mockmvc使用的controller
- *
+ * 这个是提供给restTemplate使用的controller
  * @author grzha
  */
 @Controller
-@RequestMapping(path = "/mockMvcTest")
+@RequestMapping(path = "/restTemplateTest")
 @Slf4j
-public class MockMvcController {
+public class RestTemplateController {
 
-    private static List<String> responseData = Lists.newArrayList("Java", "Study", "Demo", "MockMvc");
+    private static List<String> responseData = Lists.newArrayList("Java", "Study", "Demo", "RestTemplate");
 
     /**
      * 测试get请求的控制器
@@ -44,7 +43,7 @@ public class MockMvcController {
     public ResponseVo testGetRequest1(@RequestParam(value = "id", required = false) String id,
                                       @RequestParam(value = "name", required = false) String name,
                                       HttpServletRequest request) {
-        log.info("======MockMvcController testGetRequest1 , id:{},name:{},userId:{}", id, name, request.getAttribute("userId"));
+        log.info("======RestTemplateController testGetRequest1 , id:{},name:{},userId:{}", id, name, request.getAttribute("userId"));
         return ResponseVo.success(responseData);
     }
 
@@ -58,7 +57,7 @@ public class MockMvcController {
     @GetMapping(path = "/testGetRequest2")
     @ResponseBody
     public ResponseVo testGetRequest2(@ModelAttribute QueryRequest dto, HttpServletRequest request) {
-        log.info("======MockMvcController testGetRequest1 , dto:{},userId:{}", JSON.toJSONString(dto), request.getAttribute("userId"));
+        log.info("======RestTemplateController testGetRequest1 , dto:{},userId:{}", JSON.toJSONString(dto), request.getAttribute("userId"));
         return ResponseVo.success(responseData);
     }
 
@@ -72,7 +71,7 @@ public class MockMvcController {
     @PostMapping(path = "/testPostRequest1")
     @ResponseBody
     public ResponseVo testPostRequest1(@ModelAttribute QueryRequest dto, HttpServletRequest request) {
-        log.info("======MockMvcController testPostRequest1 , dto:{},userId:{}", JSON.toJSONString(dto), request.getAttribute("userId"));
+        log.info("======RestTemplateController testPostRequest1 , dto:{},userId:{}", JSON.toJSONString(dto), request.getAttribute("userId"));
         return ResponseVo.success(responseData);
     }
 
@@ -86,13 +85,13 @@ public class MockMvcController {
     @PostMapping(path = "/testPostRequest2")
     @ResponseBody
     public ResponseVo testPostRequest2(@RequestBody QueryRequest dto, HttpServletRequest request) {
-        log.info("======MockMvcController testPostRequest2 , dto:{},userId:{}", JSON.toJSONString(dto), request.getAttribute("userId"));
+        log.info("======RestTemplateController testPostRequest2 , dto:{},userId:{}", JSON.toJSONString(dto), request.getAttribute("userId"));
         return ResponseVo.success(responseData);
     }
 
     /**
      * 测试excel上传
-     *
+     *  ======================注意，这里不能够使用@RequestBody注解，restTemplate测试不行，mockMvc可以，需要研究一下
      * @param dto
      * @param request
      * @param file
@@ -100,8 +99,8 @@ public class MockMvcController {
      */
     @PostMapping(path = "/testUploadExcel")
     @ResponseBody
-    public ResponseVo testUploadExcel(@RequestBody QueryRequest dto, HttpServletRequest request, MultipartFile file) {
-        log.info("======MockMvcController testUploadExcel , dto:{},userId:{},file:{}", JSON.toJSONString(dto), request.getAttribute("userId"), file);
+    public ResponseVo testUploadExcel(QueryRequest dto, HttpServletRequest request, MultipartFile file) {
+        log.info("======RestTemplateController testUploadExcel , dto:{},userId:{},file:{}", JSON.toJSONString(dto), request.getAttribute("userId"), file);
         DemoListener demoListener = new DemoListener();
         try {
             EasyExcel.read(file.getInputStream(), UserInfo.class, demoListener).sheet().doRead();
@@ -123,7 +122,7 @@ public class MockMvcController {
     @PostMapping(path = "/testDownLoadExcel")
     @ResponseBody
     public void testDownLoadExcel(@RequestBody QueryRequest dto, HttpServletRequest request, HttpServletResponse response) {
-        log.info("======MockMvcController testDownLoadExcel , dto:{},userId:{}", JSON.toJSONString(dto), request.getAttribute("userId"));
+        log.info("======RestTemplateController testDownLoadExcel , dto:{},userId:{}", JSON.toJSONString(dto), request.getAttribute("userId"));
         try {
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.setCharacterEncoding("utf-8");
@@ -152,5 +151,11 @@ public class MockMvcController {
         return userInfoList;
     }
 
+    @RequestMapping("/test")
+    @ResponseBody
+    public ResponseVo testGet(){
+        log.info("=======get");
+        return ResponseVo.success();
+    }
 
 }

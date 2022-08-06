@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 
 @SpringBootTest
 @Slf4j
-public class MockMvcControllerTest {
+public class MockMvcControllerTest1 {
 
     private MockMvc mockMvc;
     @Autowired
